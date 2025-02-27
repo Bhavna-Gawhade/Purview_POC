@@ -1,10 +1,12 @@
 import requests
 import json
+from datetime import datetime
 from azure.identity import DefaultAzureCredential
 
 # Constants
 REFERENCE_NAME_PURVIEW = "hbi-qa01-datamgmt-pview"
 API_VERSION = "2023-09-01"
+
 
 # Initialize authentication and session
 credentials = DefaultAzureCredential()
@@ -54,9 +56,9 @@ def main():
             # Fetch data sources
             data_sources = fetch_data_sources(session)
 
-            # Initialize JSON file for failed scan data
-            # TODO: Change the output file name as needed and add the path
-            output_file = "failed_scans.json"
+            # Initialize JSON file for failed scan data with current date in the format YYYY_MM_DD
+            current_date = datetime.now().strftime("%Y_%m_%d")  # Format: YYYY_MM_DD
+            output_file = f"{current_date}_scan_QA_errors.json"  # Example: 2024_11_28_scan_QA_errors.json
 
             # Initialize list to store failed scan data
             failed_scan_data = []
@@ -82,6 +84,7 @@ def main():
                     # Append failed scan data to list
                     if failed_scans:
                         for failed_scan in failed_scans:
+
                             # Prepare failed scan info
                             failed_scan_info = {
                                 "Data Source Name":data_source_name,
